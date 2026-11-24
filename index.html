@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1020" />
+  <meta name="description" content="SAF SURF — ночной endless runner." />
+  <title>SAF SURF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <main id="app">
+    <div id="scene" aria-label="Игровая сцена SAF SURF"></div>
+
+    <div class="topline" aria-hidden="true">
+      <span class="topline-mark">SAF<span>/</span>SURF</span>
+      <span class="topline-status">NIGHT RUN</span>
+    </div>
+
+    <!-- Главное меню -->
+    <section id="menu-screen" class="screen screen-visible">
+      <div class="menu-heading">
+        <p class="eyebrow">AFTER DARK</p>
+        <h1>SAF <em>SURF</em></h1>
+        <p class="subtitle">НЕ ОГЛЯДЫВАЙСЯ.</p>
+      </div>
+      <div class="menu-bottom">
+        <div class="stat-row">
+          <div class="stat-block"><span>ЧАЙ</span><strong id="menu-tea">0</strong></div>
+          <div class="stat-block"><span>РЕКОРД</span><strong id="menu-best">0</strong></div>
+        </div>
+        <button id="play-button" class="button button-primary" type="button">ИГРАТЬ <span class="button-arrow">↗</span></button>
+        <button id="shop-button" class="button button-secondary" type="button">МАГАЗИН / КАСТОМИЗАЦИЯ</button>
+        <p class="menu-footnote">ЧАЙ: ВАЛЮТА  ·  БЕЛЫЕ: УСКОРЕНИЕ  ·  РЕДКИЕ БУСТЫ В ГОРОДЕ</p>
+      </div>
+    </section>
+
+    <!-- Магазин -->
+    <section id="shop-screen" class="screen">
+      <header class="panel-header">
+        <div>
+          <p class="eyebrow">YOUR LOOK</p>
+          <h2>КАСТОМИЗАЦИЯ</h2>
+        </div>
+        <div class="balance"><span>ЧАЙ</span><strong id="shop-tea">0</strong></div>
+      </header>
+      <div class="shop-tabs" role="tablist" aria-label="Категория">
+        <button class="shop-tab tab-active" data-category="top" type="button">КОФТА</button>
+        <button class="shop-tab" data-category="shoes" type="button">КРОССОВКИ</button>
+      </div>
+      <div id="shop-items" class="shop-items"></div>
+      <div class="shop-footer">
+        <p id="shop-message" aria-live="polite">Выбери свой цвет.</p>
+        <button id="shop-back" class="button button-secondary" type="button">НАЗАД</button>
+      </div>
+    </section>
+
+    <!-- Игровой HUD -->
+    <section id="game-hud" class="hud" aria-live="polite">
+      <button id="pause-button" class="pause-button" type="button" aria-label="Пауза"><span></span><span></span></button>
+      <div class="hud-values">
+        <div class="hud-value"><span>СЧЁТ</span><strong id="score-value">000000</strong></div>
+        <div class="hud-divider"></div>
+        <div class="hud-value hud-tea"><span>ЧАЙ</span><strong id="run-tea-value">0</strong></div>
+      </div>
+      <div id="power-status" class="power-status" aria-live="polite">
+        <span id="matcha-status"></span>
+        <span id="jet-status"></span>
+      </div>
+    </section>
+
+    <div id="control-hint" class="control-hint">
+      <div class="hint-line"><span>←</span><span>→</span><i>ПОЛОСА</i></div>
+      <div class="hint-line"><span>↑</span><i>ПРЫЖОК</i><span>↓</span><i>СЛАЙД</i></div>
+      <small>ЗЕЛЁНЫЙ ПАКЕТИК = ЧАЙ  ·  БЕЛЫЙ = УСКОРЕНИЕ</small>
+    </div>
+
+    <!-- Короткая вступительная сцена и реплика после задержания -->
+    <section id="cutscene-screen" class="screen cutscene-screen">
+      <div class="cinema-bar cinema-bar-top"></div>
+      <div class="cutscene-topline">
+        <span>SAF / SURF</span>
+        <button id="cutscene-skip" class="cutscene-skip" type="button">ПРОПУСТИТЬ <b>↗</b></button>
+      </div>
+      <div class="cutscene-bottomline"></div>
+      <div id="dialogue-card" class="dialogue-card speaker-officer">
+        <div class="dialogue-heading">
+          <div class="dialogue-portrait"><span></span></div>
+          <div class="dialogue-meta">
+            <span class="dialogue-kicker">NIGHT SHIFT · 02:17</span>
+            <strong id="dialogue-speaker">ПОЛИЦЕЙСКИЙ</strong>
+          </div>
+          <span class="dialogue-signal"></span>
+        </div>
+        <p id="dialogue-line" class="dialogue-line">А чё ты ночью гуляешь?</p>
+        <button id="cutscene-next" class="dialogue-next" type="button">ДАЛЬШЕ <b>→</b></button>
+      </div>
+    </section>
+
+    <!-- Пауза -->
+    <section id="pause-screen" class="screen modal-screen">
+      <div class="modal-card">
+        <p class="eyebrow">TAKE A BREATH</p>
+        <h2>ПАУЗА</h2>
+        <p class="modal-copy">Ночной город подождёт.</p>
+        <button id="resume-button" class="button button-primary" type="button">ПРОДОЛЖИТЬ</button>
+        <button id="pause-menu-button" class="button button-secondary" type="button">В МЕНЮ</button>
+      </div>
+    </section>
+
+    <!-- Результат -->
+    <section id="result-screen" class="screen modal-screen">
+      <div class="modal-card result-card">
+        <p class="eyebrow">RUN COMPLETE</p>
+        <h2>ПОЙМАЛИ.</h2>
+        <div class="result-score"><span>ТВОЙ СЧЁТ</span><strong id="result-score">0</strong></div>
+        <div class="result-stats">
+          <div><span>СОБРАНО ЧАЯ</span><strong id="result-tea">0</strong></div>
+          <div><span>РЕКОРД</span><strong id="result-best">0</strong></div>
+        </div>
+        <p id="result-police-line" class="result-police-line">ПОЛИЦЕЙСКИЙ: «Молодец, 5 звёзд собрал.»</p>
+        <button id="restart-button" class="button button-primary" type="button">ЗАНОВО</button>
+        <button id="result-menu-button" class="button button-secondary" type="button">В МЕНЮ</button>
+      </div>
+    </section>
+
+    <div id="rotate-warning"><span>SAF / SURF</span><strong>ПОВЕРНИ ТЕЛЕФОН</strong><small>ИГРА РАБОТАЕТ В ПОРТРЕТНОМ РЕЖИМЕ</small></div>
+    <div id="toast" class="toast" role="status"></div>
+  </main>
+  <script type="module" src="./game.js"></script>
+</body>
+</html>
